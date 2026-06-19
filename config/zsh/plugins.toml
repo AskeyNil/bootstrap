@@ -1,0 +1,29 @@
+shell = "zsh"
+
+[templates]
+fpath-src = 'fpath=( "{{ dir }}/src" $fpath )'
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["fpath-src"]
+
+[plugins.compinit]
+inline = "autoload -Uz compinit && compinit"
+
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+
+[plugins.eza-zsh]
+github = "MohamedElashri/eza-zsh"
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+[plugins.zsh-autosuggestions.hooks]
+post = "_zsh_autosuggest_start"
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+
+[plugins.zsh-sudo]
+github = "hcgraf/zsh-sudo"
