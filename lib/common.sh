@@ -94,7 +94,7 @@ link_with_backup() {
 
     [[ -e "${source}" ]] || die "missing source file: ${source}"
 
-    if [[ -L "${target}" && "$(readlink -- "${target}")" == "${source}" ]]; then
+    if [[ -L "${target}" && "$(readlink "${target}")" == "${source}" ]]; then
         log "${label} already linked"
         return
     fi
