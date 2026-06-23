@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check bash syntax
+        run: |
+          find . -name '*.sh' -exec bash -n {} +
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run all tests
+        run: |
+          bash tests/test-bootstrap-dry-run.sh
+          bash tests/test-macos-dry-run.sh
+          bash tests/test-one-line-bootstrap.sh
+          bash tests/test-install-openrgb.sh
