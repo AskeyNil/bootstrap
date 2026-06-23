@@ -3,28 +3,26 @@
 : "${PROXY_URL:=}"
 
 setup_proxy_from_env() {
-    if [[ -n "${PROXY_URL}" ]]; then
-        export http_proxy="${PROXY_URL}"
-        export https_proxy="${PROXY_URL}"
-        export HTTP_PROXY="${PROXY_URL}"
-        export HTTPS_PROXY="${PROXY_URL}"
-        export ALL_PROXY="${PROXY_URL}"
-        export no_proxy="localhost,127.0.0.1"
-        export NO_PROXY="${no_proxy}"
-        log "using proxy: ${PROXY_URL}"
-        return
+    if [[ -z "${PROXY_URL}" ]]; then
+        if [[ -n "${http_proxy:-}" ]]; then
+            PROXY_URL="${http_proxy}"
+        elif [[ -n "${HTTP_PROXY:-}" ]]; then
+            PROXY_URL="${HTTP_PROXY}"
+        elif [[ -n "${PROXY_HOST:-}" && -n "${PROXY_PORT:-}" ]]; then
+            PROXY_URL="http://${PROXY_HOST}:${PROXY_PORT}"
+        fi
     fi
 
-    if [[ -n "${http_proxy:-}" ]]; then
-        PROXY_URL="${http_proxy}"
-    elif [[ -n "${HTTP_PROXY:-}" ]]; then
-        PROXY_URL="${HTTP_PROXY}"
-    elif [[ -n "${PROXY_HOST:-}" && -n "${PROXY_PORT:-}" ]]; then
-        PROXY_URL="http://${PROXY_HOST}:${PROXY_PORT}"
-    fi
+    [[ -n "${PROXY_URL}" ]] || return 0
 
-    [[ -n "${PROXY_URL}" ]] || return
-    setup_proxy_from_env
+    export http_proxy="${PROXY_URL}"
+    export https_proxy="${PROXY_URL}"
+    export HTTP_PROXY="${PROXY_URL}"
+    export HTTPS_PROXY="${PROXY_URL}"
+    export ALL_PROXY="${PROXY_URL}"
+    export no_proxy="localhost,127.0.0.1"
+    export NO_PROXY="${no_proxy}"
+    log "using proxy: ${PROXY_URL}"
 }
 
 apt_get() {
